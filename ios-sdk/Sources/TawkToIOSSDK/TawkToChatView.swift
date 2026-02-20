@@ -141,6 +141,7 @@ private struct TawkWebViewRepresentable: UIViewRepresentable {
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.scrollView.bounces = true
+        webView.inputAccessoryView = UIView()
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = false
