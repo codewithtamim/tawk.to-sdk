@@ -107,6 +107,13 @@ public struct TawkToChatView: View {
 
 // MARK: - WebView
 
+private final class TawkWebView: WKWebView {
+    override var inputAccessoryView: UIView? {
+        get { nil }
+        set { }
+    }
+}
+
 private struct TawkWebViewRepresentable: UIViewRepresentable {
     let urlString: String
     let reloadTrigger: Int
@@ -131,17 +138,16 @@ private struct TawkWebViewRepresentable: UIViewRepresentable {
         )
     }
 
-    func makeUIView(context: Context) -> WKWebView {
+    func makeUIView(context: Context) -> TawkWebView {
         let config = WKWebViewConfiguration()
         config.processPool = WKProcessPool()
         config.preferences.javaScriptEnabled = true
         config.defaultWebpagePreferences.allowsContentJavaScript = true
 
-        let webView = WKWebView(frame: .zero, configuration: config)
+        let webView = TawkWebView(frame: .zero, configuration: config)
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.scrollView.bounces = true
-        webView.inputAccessoryView = UIView()
         webView.navigationDelegate = context.coordinator
         webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = false
@@ -156,7 +162,7 @@ private struct TawkWebViewRepresentable: UIViewRepresentable {
         return webView
     }
 
-    func updateUIView(_ webView: WKWebView, context: Context) {
+    func updateUIView(_ webView: TawkWebView, context: Context) {
         let coordinator = context.coordinator
         let shouldLoad = (urlString != coordinator.lastLoadedUrl || coordinator.lastReloadTrigger != reloadTrigger)
             && !urlString.isEmpty
